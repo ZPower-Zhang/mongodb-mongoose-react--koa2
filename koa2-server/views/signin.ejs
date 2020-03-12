@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.bootcss.com/bulma/0.7.1/css/bulma.min.css" rel="stylesheet">
+  <link href="https://cdn.bootcss.com/github-markdown-css/2.10.0/github-markdown.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+
+<body>
+  <%- include('components/header.ejs'); -%>
+  <!-- <h1><%= title %></h1> -->
+  <h1><%= title %></h1>
+  <div class="container">
+    <div class="box sign-box">
+      <form action="/signin" method="POST">
+        <div class="field">
+          <label class="label">用户名</label>
+          <div class="control">
+            <input class="input" name="name" type="text" autocomplete="off" placeholder="请输入用户名">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">密码</label>
+          <div class="control">
+            <!-- 禁止自动填充用户名密码 -->
+            <input type="password" style="position: absolute;left: 9999999px" />
+            <input class="input" name="password" type="password" placeholder="请输入密码">
+          </div>
+        </div>
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-primary">立即登录</button>
+          </div>
+          <div class="control">
+            <a href="/signup" class="button is-text">还没账号？</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
