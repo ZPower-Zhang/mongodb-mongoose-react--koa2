@@ -37,7 +37,7 @@ module.exports = {
     console.log("22")
     const parameters = getQueryParameters(ctx.req)
     const salt = await bcrypt.genSalt(10)
-    const { name, email, password, repassword } = ctx.request.body
+    let { name, email, password, repassword } = ctx.request.body
     let errMsg = ''
     if (name === '') {
       errMsg = '用户名不能为空'
@@ -48,31 +48,54 @@ module.exports = {
     } else if (password !== repassword) {
       errMsg = '两次密码不一样'
     }
+
     if (errMsg) {
       ctx.body = {
         code: 0,
         data: {
-          msg: errMsg,
-          email: 'user.email'
+          msg: errMsg
         }
       }
       return
     }
-    await MongodbUser.save(user).then(res => {
 
-    }).catch(error => {
+    password = await bcrypt.hash(password, salt)
+    const user = {
+      name,
+      email,
+      password
+    }
 
-    })
+    const ret = await MongodbUser.save(user)
+    
+    if (ret && ret.error && ret.error.match('duplicate key')) {
+      ctx.body = {
+        code: 0,
+        data: {
+          msg: '用户名已存在'
+        }
+      }
+      return
+    }
+    if (ret && !ret.error) {
+      ctx.body = {
+        code: 0,
+        data: {
+          msg: '用户名注册成功'
+        }
+      }
+      return
+    }
 
     // const user = await MongodbUser.findOne({ name: parameters.name })
     // console.log('ctx')
     // console.log(ctx)
-    ctx.body = {
-      code: 0,
-      data: {
-        name: 'user.name',
-        email: 'user.email'
-      }
-    }
+    // ctx.body = {
+    //   code: 0,
+    //   data: {
+    //     name: 'user.name',
+    //     email: 'user.email'
+    //   }
+    // }
   }
 }

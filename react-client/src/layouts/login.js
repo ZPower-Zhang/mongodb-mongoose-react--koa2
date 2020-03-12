@@ -61,7 +61,7 @@ class LoginIndex extends React.Component {
 
           <Form.Item
             label="确认密码"
-            name="confirm_password"
+            name="repassword"
             rules={[{ required: true, message: '请输入您的确认密码!' }]}
           >
             <Input.Password />
